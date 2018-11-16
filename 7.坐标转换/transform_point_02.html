@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+        //lon经度  lat纬度
+
+        //可用
+        function ff(lng, lat) {//[114.32894, 30.585748]
+            var earthRad = 6378137.0;
+            var x = lng * Math.PI / 180 * earthRad;
+            var a = lat * Math.PI / 180;
+            var y = earthRad / 2 * Math.log((1.0 + Math.sin(a)) / (1.0 - Math.sin(a)));
+            return [x, y]; //[12727039.383734727, 3579066.6894065146]
+        }
+
+        var test = ff(114.32894,30.585748);
+        alert(test);
+    </script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <!--
+        作者：702004176@qq.com
+        时间：2017-04-07
+        描述：在线运行代码小工具
+    -->
+    <head>
+        <meta charset="UTF-8">
+        <title>在线运行代码</title>
+        <meta name="author" content="gjf_xing.org1^"/>
+        <meta name="Description" content="在线运行代码的小工具"/>
+        <meta name="Keywords" content="小工具，代码运行，运行代码，open方法，新页面，在线调试"/>
+    </head>
+    <body>
+       
+    </body>
+    <script type="text/javascript">
+       
+       function outOfChina(lat, lon){
+       		return 0;
+       }
+
+
+       function transformLat(lon, lat){
+       		return 1;
+       }
+
+
+       function transform(lat, lon){
+       		//这个地方很奇怪，我就重新定义了两个变量来接lat，lon的值
+       		//不这么做会报错，原因我也没弄明白
+    		var lat_1 = lat;
+    		var lon_1 = lon;
+
+    		if (outOfChina(lat_1, lon_1)){
+    			var arr = new Array(lat, lon);
+    			//document.write("outOfChina"+ "<br/>");
+    			return arr;
+    		}
+
+
+    		var dLat = transformLat(lon - 105.0, lat - 35.0);
+			var dLon = transformLat(lon - 105.0, lat - 35.0);
+
+			document.write("dLat:" + dLat+ "<br/>");
+			document.write("dLon:" + dLon+ "<br/>");
+			//Math.PI为π, 为了测试我把ee赋值为0.5, a赋值为1；
+			var ee = 0.5;
+			var a = 1
+
+			var radLat =  lat / 180.0 * Math.PI;			
+			var magic = Math.sin(radLat);
+			magic = 1 - ee * magic * magic;
+			document.write("magin:"+ magic + "<br/>");
+			var sqrtMagic = Math.sqrt(magic);
+			dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * Math.PI);  
+        	dLon = (dLon * 180.0) / (a / sqrtMagic * Math.cos(radLat) * Math.PI); 
+        	document.write("dLat:" + dLat + "<br/>");
+        	document.write("dLon:" + dLon + "<br/>"); 
+        	var mgLat = lat + dLat;  
+        	var mgLon = lon + dLon;  
+        	var arr1 = new Array(mgLat, mgLon);
+        	return arr1;  
+
+    	}
+
+    	
+    	function gcj02_To_Gps84(lat, lon) {
+			var gps = transform(lat, lon);
+			var lontitude = lon * 2 - gps[1];
+			var latitude = lat * 2 - gps[0];
+			var arr3 = new Array(latitude, lontitude);
+			return  arr3;
+		};
+
+		
+		var test = gcj02_To_Gps84(23.23, 34.90);
+    	for (var i = 0; i < test.length; i++){
+    		document.write("<br/>" + "Right!?" + "<br/>");
+    		document.write("test["+ i + "]:" + test[i]+ "<br/>");
+    	}
+
+
+
+
+    </script>
+</html>

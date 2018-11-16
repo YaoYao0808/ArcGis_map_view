@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<title>GIS开发利用html5获取经纬度并在google地图中查看</title>
+<!--加载google map api-->
+<script type="text/javascript"
+src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCefZle2DqxF9i51PTfoZsZoOmvWzKYhF4&sensor=true">
+</script>
+</head>
+
+<body>
+<span id="support">将下面的经纬度输入谷歌地图：</span>
+<div id="show">
+纬度：<span id="latitude"></span><br />
+经度：<span id="longitude"></span><br />
+准确度：<span id="accuracy"></span>
+</div>
+<script type="text/javascript">
+var doc = document,
+    latitude = doc.getElementById('latitude'),
+    longitude = doc.getElementById('longitude'),
+    accuracy = doc.getElementById('accuracy'),
+    support = doc.getElementById('support'),
+    showDiv = doc.getElementById('show');
+function lodeSupport(){
+    if(navigator.geolocation){
+        support.innerHTML = '将下面的经纬度输入谷歌地图(纬度 经度)查看自己位置：';
+        showDiv.style.display = 'block';
+        navigator.geolocation.getCurrentPosition(updataPosition);
+    }else{
+        support.innerHTML = '对不起，浏览器不支持！';
+        showDiv.style.display = 'none';
+    }
+}
+function updataPosition(position){
+    var latitudeP = position.coords.latitude,
+        longitudeP = position.coords.longitude,
+        accuracyP = position.coords.accuracy;
+    latitude.innerHTML = latitudeP;
+    longitude.innerHTML = longitudeP;
+    accuracy.innerHTML = accuracyP;
+	//在google map中显示地址
+	
+	var myLatlng=new google.maps.LatLng(latitudeP, longitudeP);
+	var mapOptions = {
+	  center: myLatlng,
+	  zoom: 13,
+	  mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	var map = new google.maps.Map(document.getElementById("map_canvas"),
+		mapOptions);
+
+	var marker = new google.maps.Marker({
+	position: myLatlng,
+	title:"小编的地址"
+	});
+
+	//将标记显示在地图中
+	marker.setMap(map);
+	
+	
+}
+window.addEventListener('load', lodeSupport , true);
+</script>
+<div id="map_canvas" style="width:500px; height:500px;"></div>
+</body>
+</html>
+
+
